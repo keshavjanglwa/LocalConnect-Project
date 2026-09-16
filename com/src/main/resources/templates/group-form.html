@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Group - Locality Connect</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <h1>Create a Private Community Group</h1>
+
+    <form th:action="@{/groups}" th:object="${group}" method="post">
+        <div class="form-group">
+            <label for="name">Group Name</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="e.g. Sector 36 Residents" required>
+            <div class="error-text" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+        <div class="form-group">
+            <label for="locality">Locality</label>
+            <input type="text" id="locality" th:field="*{locality}" required>
+            <div class="error-text" th:if="${#fields.hasErrors('locality')}" th:errors="*{locality}"></div>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" th:field="*{description}" placeholder="What is this group for?"></textarea>
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" th:field="*{private}" style="width:auto;" checked>
+                Private (owner approves who joins)
+            </label>
+        </div>
+        <button type="submit" class="btn">Create Group</button>
+        <a th:href="@{/groups}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+</body> 
+</html>
