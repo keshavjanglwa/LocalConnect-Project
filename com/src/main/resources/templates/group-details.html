@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${group.name} + ' - Locality Connect'">Group</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+ 
+<div class="container">
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:start;">
+            <h1 th:text="${group.name}" style="margin:0;">Group Name</h1>
+            <span class="badge" th:text="${group.isPrivate} ? 'Private' : 'Public'">Private</span>
+        </div>
+        <div class="meta">
+            <span th:text="${group.locality}">Locality</span> ·
+            Owner: <span th:text="${group.owner.name}">Owner</span>
+        </div>
+        <p th:text="${group.description}">Description</p>
+
+        <div th:if="${!isOwner and !isMember}">
+            <form th:action="@{'/groups/' + ${group.id} + '/join'}" method="post">
+                <button type="submit" class="btn">Request to Join</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Owner-only: pending join requests -->
+    <div th:if="${isOwner}">
+        <h2>Pending Join Requests</h2>
+        <div th:if="${#lists.isEmpty(pendingRequests)}" class="empty-state">No pending requests.</div>
+        <div class="card" th:each="req : ${pendingRequests}">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span th:text="${req.user.name} + ' (' + ${req.user.email} + ')'">User</span>
+                <div>
+                    <form class="inline-form" th:action="@{'/groups/' + ${group.id} + '/members/' + ${req.id} + '/approve'}" method="post">
+                        <button type="submit" class="btn btn-small">Approve</button>
+                    </form>
+                    <form class="inline-form" th:action="@{'/groups/' + ${group.id} + '/members/' + ${req.id} + '/reject'}" method="post">
+                        <button type="submit" class="btn btn-small btn-secondary">Reject</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <h2>Members</h2>
+        <div class="card" th:each="m : ${members}">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span th:text="${m.user.name} + ' (' + ${m.user.email} + ')'">User</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
