@@ -92,6 +92,20 @@ public class GroupService {
         groupMemberRepository.save(member);
     }
 
+    public void leaveGroup(Long groupId, Long userId) {
+        groupMemberRepository.findByGroupIdAndUserId(groupId, userId)
+                .ifPresent(groupMemberRepository::delete);
+    }
+
+    public void removeMember(Long groupId, Long memberId, Long currentUserId) {
+        Group group = getByIdOrThrow(groupId);
+        assertOwner(group, currentUserId);
+        groupMemberRepository.deleteById(memberId);
+    }
+
+    
+    
+
     
 
 

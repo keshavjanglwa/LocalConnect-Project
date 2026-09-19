@@ -27,6 +27,12 @@
         </div>
     </div>
 
+    <div th:if="${!isOwner and isMember}">
+            <form class="confirm-delete" th:action="@{'/groups/' + ${group.id} + '/leave'}" method="post">
+                <button type="submit" class="btn btn-secondary">Leave Group</button>
+            </form>
+    </div>
+
     <!-- Owner-only: pending join requests -->
     <div th:if="${isOwner}">
         <h2>Pending Join Requests</h2>
@@ -49,6 +55,10 @@
         <div class="card" th:each="m : ${members}">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span th:text="${m.user.name} + ' (' + ${m.user.email} + ')'">User</span>
+                    <form class="inline-form confirm-delete" th:action="@{'/groups/' + ${group.id} + '/members/' + ${m.id} + '/remove'}" method="post"
+                      th:if="${m.user.id != group.owner.id}">
+                    <button type="submit" class="btn btn-small btn-danger">Remove</button>
+                </form>
             </div>
         </div>
     </div>

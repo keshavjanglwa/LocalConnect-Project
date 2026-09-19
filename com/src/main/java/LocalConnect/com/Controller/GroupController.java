@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import LocalConnect.com.Entity.Group;
 import LocalConnect.com.Entity.GroupMember;
 import LocalConnect.com.Entity.User;
@@ -104,6 +103,21 @@ public class GroupController {
                                 @PathVariable Long id, @PathVariable Long memberId) {
         User user = currentUser(principal);
         groupService.rejectMember(id, memberId, user.getId());
+        return "redirect:/groups/" + id;
+    }
+
+    @PostMapping("/{id}/leave")
+    public String leave(@AuthenticationPrincipal UserDetails principal, @PathVariable Long id) {
+        User user = currentUser(principal);
+        groupService.leaveGroup(id, user.getId());
+        return "redirect:/groups";
+    }
+
+    @PostMapping("/{id}/members/{memberId}/remove")
+    public String removeMember(@AuthenticationPrincipal UserDetails principal,
+                                @PathVariable Long id, @PathVariable Long memberId) {
+        User user = currentUser(principal);
+        groupService.removeMember(id, memberId, user.getId());
         return "redirect:/groups/" + id;
     }
 
