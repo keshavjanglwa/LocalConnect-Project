@@ -19,6 +19,12 @@
             Owner: <span th:text="${group.owner.name}">Owner</span>
         </div>
         <p th:text="${group.description}">Description</p>
+                
+        <div th:if="${isOwner}">
+            <form class="inline-form confirm-delete" th:action="@{'/groups/' + ${group.id} + '/delete'}" method="post">
+                <button type="submit" class="btn btn-small btn-danger">Delete Group</button>
+            </form>
+        </div>
 
         <div th:if="${!isOwner and !isMember}">
             <form th:action="@{'/groups/' + ${group.id} + '/join'}" method="post">

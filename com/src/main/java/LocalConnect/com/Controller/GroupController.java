@@ -1,7 +1,6 @@
 package LocalConnect.com.Controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +17,7 @@ import LocalConnect.com.Entity.GroupMember;
 import LocalConnect.com.Entity.User;
 import LocalConnect.com.Service.GroupService;
 import LocalConnect.com.Service.UserService;
+import jakarta.transaction.Transactional;
 
 @Controller
 @RequestMapping("/groups")
@@ -119,6 +119,14 @@ public class GroupController {
         User user = currentUser(principal);
         groupService.removeMember(id, memberId, user.getId());
         return "redirect:/groups/" + id;
+    }
+    
+    @Transactional
+    @PostMapping("/{id}/delete")
+    public String deleteGroup(@AuthenticationPrincipal UserDetails principal, @PathVariable Long id) {
+        User user = currentUser(principal);
+        groupService.deleteGroup(id, user.getId());
+        return "redirect:/groups";
     }
 
     

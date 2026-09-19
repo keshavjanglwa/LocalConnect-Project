@@ -103,6 +103,17 @@ public class GroupService {
         groupMemberRepository.deleteById(memberId);
     }
 
+    public void deleteGroupMembersForGroup(Long groupId) {
+        groupMemberRepository.deleteByGroupId(groupId);
+    }
+
+    public void deleteGroup(Long groupId ,Long currentUserId) {
+        Group group = getByIdOrThrow(groupId);
+        assertOwner(group, currentUserId);
+        deleteGroupMembersForGroup(groupId);
+        groupRepository.delete(group);
+    }
+
     
     
 
