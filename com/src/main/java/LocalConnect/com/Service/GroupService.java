@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import LocalConnect.com.Entity.Group;
 import LocalConnect.com.Entity.GroupMember;
+import LocalConnect.com.Entity.GroupPost;
 import LocalConnect.com.Entity.User;
 import LocalConnect.com.Repository.GroupMemberRepository;
+import LocalConnect.com.Repository.GroupPostRepository;
 import LocalConnect.com.Repository.GroupRepository;
 
 @Service
@@ -19,6 +21,8 @@ public class GroupService {
    private GroupRepository groupRepository;
    @Autowired
    private GroupMemberRepository groupMemberRepository;
+   @Autowired
+   private GroupPostRepository groupPostRepository;
    
     public Group createGroup(Group group, User owner) {
         group.setOwner(owner);
@@ -113,6 +117,34 @@ public class GroupService {
         deleteGroupMembersForGroup(groupId);
         groupRepository.delete(group);
     }
+    
+    public GroupPost createGroupPost(Long groupId, User author, String message) {
+        Group group = getByIdOrThrow(groupId);
+        GroupPost post = new GroupPost();
+        post.setGroup(group);
+        post.setUser(author);
+        post.setMessage(message);
+        return groupPostRepository.save(post);
+    }
+
+    public List<GroupPost> getPostsForGroup(Long groupId) {
+        return groupPostRepository.findByGroupIdOrderByCreatedAtDesc(groupId);
+    }
+
+    public void deleteGroupPost(Long groupId, Long postId, Long currentUserId) {
+        Group group = getByIdOrThrow(groupId);
+        GroupPost post = groupPostRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+
+        boolean isAuthor = post.getUser().getId().equals(currentUserId);
+        boolean isOwner = isOwner(group, currentUserId);
+
+        if (!isAuthor && !isOwner) {
+            throw new SecurityException("You are not allowed to delete this post");
+        }
+        groupPostRepository.delete(post);
+    }
+
 
     
     

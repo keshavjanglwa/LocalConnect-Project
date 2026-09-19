@@ -69,6 +69,33 @@
         </div>
     </div>
 
+    <div th:if="${isMember or isOwner}">
+        <h2>Group Posts</h2>
+        <div class="card">
+            <form th:action="@{'/groups/' + ${group.id} + '/posts'}" method="post">
+                <div class="form-group">
+                    <label for="message">Share something with the group</label>
+                    <textarea id="message" name="message" placeholder="Local issue, help request, announcement..." required></textarea>
+                </div>
+                <button type="submit" class="btn">Post</button>
+            </form>
+        </div>
+
+        <div th:if="${#lists.isEmpty(posts)}" class="empty-state">No posts in this group yet.</div>
+
+        <div class="card" th:each="p : ${posts}">
+            <div class="meta">
+                <strong th:text="${p.user.name}">Author</strong> ·
+                <span th:text="${#temporals.format(p.createdAt, 'dd MMM, hh:mm a')}">time</span>
+            </div>
+            <p th:text="${p.message}">Post message</p>
+                <form class="inline-form confirm-delete" th:action="@{'/groups/' + ${group.id} + '/posts/' + ${p.id} + '/delete'}" method="post"
+                  th:if="${p.user.id == currentUser.id or isOwner}">
+                <button type="submit" class="btn btn-small btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>
