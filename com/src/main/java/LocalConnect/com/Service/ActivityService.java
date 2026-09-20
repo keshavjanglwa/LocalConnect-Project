@@ -24,6 +24,8 @@ public class ActivityService {
     private ActivityPostRepository activityPostRepository;
     @Autowired
     private ActivityReplyRepository activityReplyRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     public ActivityPost createPost(ActivityPost post, User owner) {
         post.setUser(owner);
@@ -79,6 +81,8 @@ public class ActivityService {
         reply.setUser(replier);
         reply.setMessage(message);
         ActivityReply saved = activityReplyRepository.save(reply);
+        notificationService.notify(post.getUser(),
+          replier.getName() + " replied to your activity post: " + post.getActivityName());
         return saved;
     }
     public void acceptReply(Long postId, Long replyId, Long currentUserId) {
@@ -90,6 +94,9 @@ public class ActivityService {
 
         reply.setStatus("ACCEPTED");
         activityReplyRepository.save(reply);
+
+        notificationService.notify(reply.getUser(),
+         "Your reply was accepted for: " + post.getActivityName());
         
         long acceptedCount = activityReplyRepository.findByActivityPostIdOrderByCreatedAtAsc(postId)
                 .stream().filter(r -> "ACCEPTED".equals(r.getStatus())).count();

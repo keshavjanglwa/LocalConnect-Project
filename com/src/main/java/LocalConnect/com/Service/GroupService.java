@@ -23,6 +23,8 @@ public class GroupService {
    private GroupMemberRepository groupMemberRepository;
    @Autowired
    private GroupPostRepository groupPostRepository;
+    @Autowired
+    private NotificationService notificationService;
    
     public Group createGroup(Group group, User owner) {
         group.setOwner(owner);
@@ -74,6 +76,9 @@ public class GroupService {
         member.setUser(user);
         member.setStatus("PENDING");
         groupMemberRepository.save(member);
+        
+         notificationService.notify(group.getOwner(),
+                 user.getName() + " requested to join " + group.getName());
     }
 
     public void approveMember(Long groupId, Long memberId, Long currentUserId) {
@@ -84,6 +89,9 @@ public class GroupService {
                 .orElseThrow(() -> new IllegalArgumentException("Membership request not found"));
         member.setStatus("APPROVED");
         groupMemberRepository.save(member);
+
+        notificationService.notify(member.getUser(), "You were approved to join " + group.getName());
+
     }
 
     public void rejectMember(Long groupId, Long memberId, Long currentUserId) {
