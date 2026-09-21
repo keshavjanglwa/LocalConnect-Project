@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Locality Connect</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <h1>Admin Dashboard</h1>
+
+    <h2>Reports</h2>
+    <div th:if="${#lists.isEmpty(reports)}" class="empty-state">No reports have been filed.</div>
+
+    <table th:if="${!#lists.isEmpty(reports)}">
+        <thead>
+        <tr>
+            <th>Reporter</th>
+            <th>Target Type</th>
+            <th>Target ID</th>
+            <th>Reason</th> 
+            <th>Status</th>
+            <th>Filed</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${reports}">
+            <td th:text="${r.reporter.name}">Reporter</td>
+            <td th:text="${r.targetType}">Type</td>
+            <td th:text="${r.targetId}">ID</td>
+            <td th:text="${r.reason}">Reason</td>
+            <td><span class="badge" th:text="${r.status}">OPEN</span></td>
+            <td th:text="${#temporals.format(r.createdAt, 'dd MMM, hh:mm a')}">time</td>
+            <td>
+                <form class="inline-form" th:action="@{'/admin/reports/' + ${r.id} + '/status'}" method="post">
+                    <input type="hidden" name="status" value="REVIEWED">
+                    <button type="submit" class="btn btn-small">Mark Reviewed</button>
+                </form>
+                <form class="inline-form" th:action="@{'/admin/reports/' + ${r.id} + '/status'}" method="post">
+                    <input type="hidden" name="status" value="DISMISSED">
+                    <button type="submit" class="btn btn-small btn-secondary">Dismiss</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2 style="margin-top:30px;">Users</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Locality</th>
+            <th>Role</th>
+            <th>Joined</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.name}">Name</td>
+            <td th:text="${u.email}">Email</td>
+            <td th:text="${u.locality}">Locality</td>
+            <td th:text="${u.role}">USER</td>
+            <td th:text="${#temporals.format(u.createdAt, 'dd MMM yyyy')}">date</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
