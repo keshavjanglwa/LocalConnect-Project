@@ -2,6 +2,8 @@ package LocalConnect.com.Entity;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,5 +25,6 @@ public class User {
     private String password;
     private String locality;
     private String role = "USER";
+    private Boolean isEnable = true;
     private LocalDateTime createdAt = LocalDateTime.now();
 }

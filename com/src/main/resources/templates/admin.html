@@ -49,7 +49,7 @@
     </table>
 
     <h2 style="margin-top:30px;">Users</h2>
-    <table>
+    <table>  
         <thead>
         <tr>
             <th>Name</th>
@@ -57,18 +57,31 @@
             <th>Locality</th>
             <th>Role</th>
             <th>Joined</th>
+            <th>Status</th>
+            <th>Action</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="u : ${users}">
-            <td th:text="${u.name}">Name</td>
-            <td th:text="${u.email}">Email</td>
-            <td th:text="${u.locality}">Locality</td>
-            <td th:text="${u.role}">USER</td>
-            <td th:text="${#temporals.format(u.createdAt, 'dd MMM yyyy')}">date</td>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.name}">1</td>
+            <td th:text="${user.email}">username</td>
+            <td th:text="${user.locality}">USER</td>
+            <td th:text="${user.role}">USER</td>
+            <td th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy')}">date</td>
+            <td>
+                <span class="badge badge-green" th:if="${user.isEnable}">ACTIVE</span>
+                <span class="badge badge-red" th:unless="${user.isEnable}">DEACTIVATED</span>
+            </td>
+            <td>
+                <!-- Activate / Deactivate -->
+                <form th:action="@{/admin/users/{id}/toggle-status(id=${user.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-red" th:if="${user.isEnable}">Deactivate</button>
+                    <button type="submit" class="btn btn-green" th:unless="${user.isEnable}">Activate</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
+
 </div>
 </body>
 </html>

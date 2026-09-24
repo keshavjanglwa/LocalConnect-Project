@@ -31,6 +31,7 @@ public class UserService implements UserDetailsService{
                 .withUsername(user.getEmail())
                 .password(user.getPassword())
                 .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())))
+                .disabled(!user.getIsEnable())
                 .build();
     }
 
@@ -43,6 +44,7 @@ public class UserService implements UserDetailsService{
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setLocality(locality);
+        user.setIsEnable(true);
         return userRepository.save(user);
     }
 

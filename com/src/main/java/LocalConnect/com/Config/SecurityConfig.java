@@ -22,9 +22,9 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 // Public pages
-                .requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/login", "/register", "/admin/**" , "/css/**", "/js/**", "/images/**").permitAll()
                 // Admin-only pages
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                // .requestMatchers("/admin/**").hasRole("ADMIN")
                 // Everything else requires login
                 .anyRequest().authenticated()
             )

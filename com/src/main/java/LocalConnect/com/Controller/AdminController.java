@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import LocalConnect.com.Entity.Report;
 import LocalConnect.com.Entity.User;
 import LocalConnect.com.Repository.ReportRepository;
@@ -54,7 +52,7 @@ public class AdminController {
     public String toggleStatus(@PathVariable Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
-        user.setEnabled(!user.isEnabled());
+        user.setIsEnable(!user.getIsEnable());
         userRepository.save(user);
         return "redirect:/admin";
     }
