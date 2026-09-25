@@ -11,7 +11,10 @@
     <p style="text-align:center; color:#6b6b6b;">Find local activity partners &amp; community groups</p>
 
     <div class="alert alert-error" th:if="${param.error}">
-        Invalid username or password, or your account is disabled/locked.
+        Invalid email or password.
+    </div>
+    <div class="alert alert-error" th:if="${param.blocked}">
+        Your account has been blocked by an admin. Please contact support if you think this is a mistake.
     </div>
     <div class="alert alert-success" th:if="${param.registered}">
         Account created! Please log in.

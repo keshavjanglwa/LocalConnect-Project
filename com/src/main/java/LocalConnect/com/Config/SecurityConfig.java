@@ -7,10 +7,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private LoginFailureHandler loginFailureHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -34,7 +38,7 @@ public class SecurityConfig {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/home", true)
-                .failureUrl("/login?error=true")
+                .failureHandler(loginFailureHandler)
                 .permitAll()
             )
             .logout(logout -> logout
