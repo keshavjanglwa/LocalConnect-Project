@@ -20,8 +20,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            // The admin-register API is protected by its own secret key check
+            // (see AdminAuthController) rather than a browser CSRF token, since
+            // it is only ever called from tools like Postman.
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/admin/register"))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/register", "/admin/**" , "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/login", "/register", "/api/admin/register", "/admin/**" , "/css/**", "/js/**", "/images/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

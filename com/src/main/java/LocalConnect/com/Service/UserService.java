@@ -48,6 +48,20 @@ public class UserService implements UserDetailsService{
         return userRepository.save(user);
     }
 
+    public User registerAdmin(String name, String email, String rawPassword, String locality) {
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("An account with this email already exists");
+        }
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setLocality(locality);
+        user.setRole("ADMIN");
+        user.setIsEnable(true);
+        return userRepository.save(user);
+    }
+
     public User getByEmailOrThrow(String username) {
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No account found for " + username));
