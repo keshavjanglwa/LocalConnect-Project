@@ -13,7 +13,6 @@ import LocalConnect.com.Repository.ReportRepository;
 import LocalConnect.com.Service.UserService;
 
 @Controller
-@RequestMapping("/user/report")
 public class ReportController {
     
     @Autowired

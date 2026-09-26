@@ -36,7 +36,7 @@
             </form>
         </div>
 
-        <div th:unless="${isOwner}" style="margin-top:10px;">
+        <div style="margin-top:10px;">
             <form th:action="@{/reports}" method="post">
                 <input type="hidden" name="targetType" value="ACTIVITY_POST">
                 <input type="hidden" name="targetId" th:value="${post.id}">
