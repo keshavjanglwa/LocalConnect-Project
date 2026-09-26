@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Something went wrong - Locality Connect</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="auth-card">
+    <h1>Something went wrong</h1>
+    <div class="alert alert-error" th:text="${errorMessage}">
+        An unexpected error occurred.
+    </div>
+    <p style="text-align:center; margin-top:16px;">
+        <a th:href="@{/home}" class="btn">Back to home</a>
+    </p>
+</div>
+</body>
+</html>

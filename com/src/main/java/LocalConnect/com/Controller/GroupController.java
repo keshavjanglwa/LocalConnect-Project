@@ -22,6 +22,7 @@ import LocalConnect.com.Entity.User;
 import LocalConnect.com.Service.GroupService;
 import LocalConnect.com.Service.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/groups")
@@ -55,7 +56,7 @@ public class GroupController {
 
     @PostMapping
     public String create(@AuthenticationPrincipal UserDetails principal,
-                        @ModelAttribute("group") Group group,
+                        @Valid @ModelAttribute("group") Group group,
                         BindingResult bindingResult) {
                             
         if (bindingResult.hasErrors()) {

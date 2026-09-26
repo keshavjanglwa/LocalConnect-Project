@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Entity
@@ -22,7 +23,10 @@ public class BusinessPost {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @NotBlank(message = "Business name is required")
     private String businessName;
+
+    @NotBlank(message = "Please select a category")
     private String category;
     private String locality;
     private String address;

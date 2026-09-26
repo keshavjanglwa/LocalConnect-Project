@@ -18,6 +18,7 @@ import LocalConnect.com.Entity.ActivityReply;
 import LocalConnect.com.Entity.User;
 import LocalConnect.com.Service.ActivityService;
 import LocalConnect.com.Service.UserService;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/activities")
@@ -66,7 +67,7 @@ public class ActivityController {
 
     @PostMapping
     public String create(@AuthenticationPrincipal UserDetails principal,
-                        @ModelAttribute("activityPost") ActivityPost activityPost,
+                        @Valid @ModelAttribute("activityPost") ActivityPost activityPost,
                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "activity-form";

@@ -17,6 +17,7 @@ import LocalConnect.com.Entity.BusinessPost;
 import LocalConnect.com.Entity.User;
 import LocalConnect.com.Service.BusinessService;
 import LocalConnect.com.Service.UserService;
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -51,7 +52,7 @@ public class BusinessController {
 
     @PostMapping
     public String create(@AuthenticationPrincipal UserDetails principal,
-                          @ModelAttribute("businessPost") BusinessPost businessPost,
+                          @Valid @ModelAttribute("businessPost") BusinessPost businessPost,
                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "business-form";
