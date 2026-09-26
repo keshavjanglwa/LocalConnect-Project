@@ -52,6 +52,14 @@ public class AuthController {
         return "register";
     }
 
+    // Shown when a logged-in user who is NOT an admin tries to open an
+    // /admin/** page (see SecurityConfig's .accessDeniedPage(...)).
+    @GetMapping("/access-denied")
+    public String accessDenied(Model model) {
+        model.addAttribute("errorMessage", "Somting went wrong.");
+        return "error-generic";
+    }
+
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user") User formUser,
                             BindingResult bindingResult,

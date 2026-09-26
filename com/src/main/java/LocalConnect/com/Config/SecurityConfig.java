@@ -1,5 +1,6 @@
 package LocalConnect.com.Config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,7 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
 @EnableWebSecurity
@@ -29,8 +29,14 @@ public class SecurityConfig {
             // it is only ever called from tools like Postman.
             .csrf(csrf -> csrf.ignoringRequestMatchers("/api/admin/register"))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/register", "/api/admin/register", "/admin/**" , "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/login", "/register", "/api/admin/register", "/access-denied", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
+            )
+            // If a non-admin tries to open an /admin/** page, show a friendly
+            // message instead of Spring's default 403 error page.
+            .exceptionHandling(exceptions -> exceptions
+                .accessDeniedPage("/access-denied")
             )
             .formLogin(form -> form
                 .loginPage("/login")
