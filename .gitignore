@@ -3,3 +3,4 @@ com/src/main/resources/application.properties
 .vscode/launch.json
 admin-register-feature.patch
 blocked-login-message.patch
+com/src/main/resources/static/favicon.ico

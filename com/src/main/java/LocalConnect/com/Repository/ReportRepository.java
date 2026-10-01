@@ -7,4 +7,11 @@ import LocalConnect.com.Entity.Report;
 public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findByStatusOrderByCreatedAtDesc(String status);
     List<Report> findAllByOrderByCreatedAtDesc();
-}
+
+        boolean existsByReporter_IdAndTargetTypeAndTargetId(
+            Long reporterId,
+            String targetType,
+            Long targetId
+    );
+
+} 

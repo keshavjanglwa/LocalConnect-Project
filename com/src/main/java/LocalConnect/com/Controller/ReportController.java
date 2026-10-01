@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import LocalConnect.com.Entity.Report;
 import LocalConnect.com.Entity.User;
 import LocalConnect.com.Repository.ReportRepository;
@@ -29,11 +32,23 @@ public class ReportController {
     // (activity post, activity reply, business post or group post).
     @PostMapping("/reports")
     public String createReport(@AuthenticationPrincipal UserDetails principal,
+                                RedirectAttributes redirectAttributes,
                                 @RequestParam String targetType,
                                 @RequestParam Long targetId,
                                 @RequestParam String reason,
                                 @RequestParam(required = false) String redirectTo) {
         User user = userService.getByEmailOrThrow(principal.getUsername());
+        
+        boolean alreadyReported =
+        reportRepository.existsByReporter_IdAndTargetTypeAndTargetId(
+                user.getId(), targetType, targetId);
+
+        if (alreadyReported) {
+            redirectAttributes.addFlashAttribute("reportMessage","You have already reported this content.");
+
+        return "redirect:" +(redirectTo != null && !redirectTo.isBlank() ? redirectTo : "/home");
+        
+        }
 
         Report report = new Report();
         report.setReporter(user);

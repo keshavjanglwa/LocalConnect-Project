@@ -14,6 +14,9 @@
             <h1 th:text="${post.activityName}" style="margin:0;">Activity</h1>
             <span class="badge" th:classappend="'status-' + ${post.status}" th:text="${post.status}">OPEN</span>
         </div>
+
+        <div class="alert alert-error" th:if="${reportMessage}" th:text="${reportMessage}"></div>
+        
         <div class="meta">
             Posted by <span th:text="${post.user.name}">Someone</span> ·
             <span th:text="${#temporals.format(post.activityTime, 'dd MMM, hh:mm a')}">time</span> ·
@@ -35,7 +38,6 @@
                 <button type="submit" class="btn btn-small btn-danger">Delete Post</button>
             </form>
         </div>
-
         <div style="margin-top:10px;">
             <form th:action="@{/reports}" method="post">
                 <input type="hidden" name="targetType" value="ACTIVITY_POST">
